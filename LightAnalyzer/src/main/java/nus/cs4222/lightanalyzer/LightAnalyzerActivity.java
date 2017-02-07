@@ -169,8 +169,17 @@ public class LightAnalyzerActivity
         // Log the reading
         logLightReading( timestamp , lux );
 
+        // Get the environment description text
+        String env = "";
+        if (lux > ENV_THRESHOLD) {
+            env = ENV_OUT_TEXT;
+        } else {
+            env = ENV_IN_TEXT;
+        }
+
+
         // Update the GUI
-        updateLightTextView( timestamp , lux );
+        updateLightTextView( timestamp , lux , env);
     }
 
     /** Called when the light sensor accuracy changes. */
@@ -234,13 +243,14 @@ public class LightAnalyzerActivity
 
     /** Helper method that updates the light text view. */
     private void updateLightTextView( long timestamp , 
-                                      float lux ) {
+                                      float lux, String env ) {
 
         // Light sensor reading details
         final StringBuilder sb = new StringBuilder();
         sb.append( "\nLight--" );
         sb.append( "\nNumber of readings: " + numLightReadings );
         sb.append( "\nAmbient light level (lux): " + lux );
+        sb.append("\nEnvironment: " + env);
 
         // Update the text view in the main UI thread
         handler.post ( new Runnable() {
@@ -353,4 +363,9 @@ public class LightAnalyzerActivity
 
     /** DDMS Log Tag. */
     private static final String TAG = "LightAnalyzerActivity";
+
+    private static final int ENV_THRESHOLD = 500;
+    private static final String ENV_OUT_TEXT = "Outdoor";
+    private static final String ENV_IN_TEXT = "Indoor";
+
 }
